@@ -7,25 +7,15 @@ import Logo from "@/components/logo";
 export default function Home() {
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
-      {/* Black Background Elements */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Large black circle top-left */}
         <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-black opacity-5 blur-2xl" />
-
-        {/* Tech dot grid bottom-right */}
         <div className="absolute bottom-16 right-12 grid grid-cols-4 gap-2">
           {[...Array(16)].map((_, i) => (
             <div key={i} className="h-2 w-2 bg-black opacity-10 rounded-full" />
           ))}
         </div>
-
-        {/* Angled bar */}
         <div className="absolute top-1/2 -left-40 w-[400px] h-[4px] bg-black opacity-10 rotate-45" />
-
-        {/* Framed box */}
         <div className="absolute top-20 right-20 h-32 w-32 border-2 border-black opacity-10 rounded-lg rotate-12" />
-
-        {/* Subtle rectangle */}
         <div className="absolute bottom-28 left-1/3 h-40 w-64 bg-black opacity-5 rotate-3 rounded-lg blur-sm" />
       </div>
 

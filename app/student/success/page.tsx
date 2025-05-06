@@ -12,29 +12,30 @@ export default function SuccessPage() {
   const [attendanceRecord, setAttendanceRecord] = useState<any>(null)
 
   useEffect(() => {
-    // Get student info from localStorage
-    const storedInfo = localStorage.getItem("studentInfo")
+    const storedInfo = localStorage.getItem("studentInfo");
     if (!storedInfo) {
-      router.push("/student")
-      return
+      router.push("/student");
+      return;
     }
 
-    setStudentInfo(JSON.parse(storedInfo))
-
-    // Get the latest attendance record for this student
-    const attendanceRecords = JSON.parse(localStorage.getItem("attendanceRecords") || "[]")
+    setStudentInfo(JSON.parse(storedInfo));
+    const attendanceRecords = JSON.parse(
+      localStorage.getItem("attendanceRecords") || "[]"
+    );
     if (attendanceRecords.length > 0) {
-      const studentData = JSON.parse(storedInfo)
-      // Find the most recent attendance record for this student
+      const studentData = JSON.parse(storedInfo);
       const latestRecord = [...attendanceRecords]
         .filter((record) => record.regNo === studentData.regNo)
-        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0]
+        .sort(
+          (a, b) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        )[0];
 
       if (latestRecord) {
-        setAttendanceRecord(latestRecord)
+        setAttendanceRecord(latestRecord);
       }
     }
-  }, [router])
+  }, [router]);
 
   if (!studentInfo) {
     return <div className="flex h-screen items-center justify-center">Loading...</div>

@@ -30,42 +30,38 @@ export default function ScanPage() {
   const [sessions, setSessions] = useState<any[]>([])
 
   useEffect(() => {
-    // Get student info from localStorage
-    const storedInfo = localStorage.getItem("studentInfo")
+    const storedInfo = localStorage.getItem("studentInfo");
     if (!storedInfo) {
-      router.push("/student")
-      return
+      router.push("/student");
+      return;
     }
 
-    setStudentInfo(JSON.parse(storedInfo))
+    setStudentInfo(JSON.parse(storedInfo));
 
-    // Get available sessions
-    const storedSessions = JSON.parse(localStorage.getItem("sessions") || "[]")
-    // Filter sessions that are still active and match the student's department
-    const studentInfo = JSON.parse(storedInfo)
+    const storedSessions = JSON.parse(localStorage.getItem("sessions") || "[]");
+    const studentInfo = JSON.parse(storedInfo);
     const activeSessions = storedSessions.filter((session: any) => {
-      const isActive = new Date(session.expiresAt) > new Date()
-      const matchesDepartment = session.subjectCode === studentInfo.departmentId
-      return isActive && matchesDepartment
-    })
-    setSessions(activeSessions)
-
-    // Check location
-    checkLocation()
-  }, [router])
+      const isActive = new Date(session.expiresAt) > new Date();
+      const matchesDepartment =
+        session.subjectCode === studentInfo.departmentId;
+      return isActive && matchesDepartment;
+    });
+    setSessions(activeSessions);
+    checkLocation();
+  }, [router]);
 
   const checkLocation = () => {
-    setLocationChecked(true) // Mark as checked regardless of outcome
+    setLocationChecked(true);
 
     if (!navigator.geolocation) {
-      console.log("Geolocation not supported by this browser")
+      console.log("Geolocation not supported by this browser");
       toast({
         title: "Location Unavailable",
         description:
           "Your browser doesn't support geolocation. Attendance will be marked without location verification.",
-      })
-      setIsWithinRange(true) // Allow attendance without location in preview
-      return
+      });
+      setIsWithinRange(true);
+      return;
     }
 
     try {
@@ -74,82 +70,75 @@ export default function ScanPage() {
           const studentLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-          }
-          setLocation(studentLocation)
-
-          // Mock classroom location (in a real app, this would come from the database)
+          };
+          setLocation(studentLocation);
           const classroomLocation = {
-            lat: position.coords.latitude + 0.0001, // Very close for testing
+            lat: position.coords.latitude + 0.0001,
             lng: position.coords.longitude + 0.0001,
-          }
-
-          // Calculate distance (using a simple approximation for demo)
+          };
           const distance = calculateDistance(
             studentLocation.lat,
             studentLocation.lng,
             classroomLocation.lat,
-            classroomLocation.lng,
-          )
-
-          // Check if within 50 meters
-          const withinRange = distance <= 50
-          setIsWithinRange(withinRange)
+            classroomLocation.lng
+          );
+          const withinRange = distance <= 50;
+          setIsWithinRange(withinRange);
 
           if (!withinRange) {
             toast({
               title: "Location Warning",
-              description: "You appear to be outside the classroom range (50m). Attendance may be flagged.",
+              description:
+                "You appear to be outside the classroom range (50m). Attendance may be flagged.",
               variant: "destructive",
-            })
+            });
           } else {
             toast({
               title: "Location Verified",
               description: "You are within the classroom range.",
-            })
+            });
           }
         },
         (error) => {
-          console.error("Error getting location:", error)
+          console.error("Error getting location:", error);
+          setIsWithinRange(true);
 
-          // For preview/demo purposes, allow attendance without location
-          setIsWithinRange(true)
-
-          let errorMessage = "Unable to get your location. "
+          let errorMessage = "Unable to get your location. ";
 
           switch (error.code) {
             case error.PERMISSION_DENIED:
-              errorMessage += "Location permission denied."
-              break
+              errorMessage += "Location permission denied.";
+              break;
             case error.POSITION_UNAVAILABLE:
-              errorMessage += "Location information unavailable."
-              break
+              errorMessage += "Location information unavailable.";
+              break;
             case error.TIMEOUT:
-              errorMessage += "Location request timed out."
-              break
+              errorMessage += "Location request timed out.";
+              break;
             default:
-              errorMessage += "An unknown error occurred."
+              errorMessage += "An unknown error occurred.";
           }
 
           toast({
             title: "Location Error",
-            description: errorMessage + " Proceeding without location verification.",
-          })
+            description:
+              errorMessage + " Proceeding without location verification.",
+          });
         },
-        { timeout: 10000, enableHighAccuracy: false },
-      )
+        { timeout: 10000, enableHighAccuracy: false }
+      );
     } catch (e) {
-      console.error("Geolocation error:", e)
-      setIsWithinRange(true) // Allow attendance without location in preview
+      console.error("Geolocation error:", e);
+      setIsWithinRange(true);
       toast({
         title: "Location Error",
-        description: "Unable to access location services. Proceeding without location verification.",
-      })
+        description:
+          "Unable to access location services. Proceeding without location verification.",
+      });
     }
   }
-
-  // Simple distance calculation using Haversine formula (approximate)
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    const R = 6371e3 // Earth radius in meters
+    const R = 6371e3;
     const φ1 = (lat1 * Math.PI) / 180
     const φ2 = (lat2 * Math.PI) / 180
     const Δφ = ((lat2 - lat1) * Math.PI) / 180
@@ -157,7 +146,7 @@ export default function ScanPage() {
 
     const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2)
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-    return R * c // Distance in meters
+    return R * c; 
   }
 
   const handleSessionSelect = (session: any) => {
@@ -167,18 +156,16 @@ export default function ScanPage() {
 
   const handleQrCodeScanned = (data: string) => {
     try {
-      // Assuming QR code contains a JSON string with session info
-      const qrData = JSON.parse(data)
-      setScanResult(data)
-
-      // Mark attendance with the scanned data
-      markAttendance(qrData.sessionId)
+      const qrData = JSON.parse(data);
+      setScanResult(data);
+      markAttendance(qrData.sessionId);
     } catch (error) {
       toast({
         title: "Invalid QR Code",
-        description: "The QR code could not be processed. Please try again or use manual entry.",
+        description:
+          "The QR code could not be processed. Please try again or use manual entry.",
         variant: "destructive",
-      })
+      });
     }
   }
 
@@ -200,17 +187,18 @@ export default function ScanPage() {
     setIsSubmitting(true)
 
     try {
-      // Find the session
-      const storedSessions = JSON.parse(localStorage.getItem("sessions") || "[]")
-      const session = storedSessions.find((s: any) => s.sessionId === sessionId)
+      const storedSessions = JSON.parse(
+        localStorage.getItem("sessions") || "[]"
+      );
+      const session = storedSessions.find(
+        (s: any) => s.sessionId === sessionId
+      );
 
       if (!session) {
-        throw new Error("Session not found")
+        throw new Error("Session not found");
       }
-
-      // Check if session is expired
       if (new Date(session.expiresAt) < new Date()) {
-        throw new Error("Session has expired")
+        throw new Error("Session has expired");
       }
 
       const attendanceRecord = {
@@ -218,51 +206,48 @@ export default function ScanPage() {
         regNo: studentInfo.regNo,
         departmentId: studentInfo.departmentId,
         timestamp: new Date().toISOString(),
-        location: location || { lat: 0, lng: 0 }, // Provide fallback location
+        location: location || { lat: 0, lng: 0 },
         status: isWithinRange ? "present" : "flagged",
         isWithinRange,
-      }
-
-      // Get existing attendance records or initialize empty array
-      const existingRecords = JSON.parse(localStorage.getItem("attendanceRecords") || "[]")
-
-      // Check if student already marked attendance for this session
+      };
+      const existingRecords = JSON.parse(
+        localStorage.getItem("attendanceRecords") || "[]"
+      );
       const alreadyMarked = existingRecords.some(
-        (record: any) => record.sessionId === sessionId && record.regNo === studentInfo.regNo,
-      )
+        (record: any) =>
+          record.sessionId === sessionId && record.regNo === studentInfo.regNo
+      );
 
       if (alreadyMarked) {
-        throw new Error("You have already marked attendance for this session")
+        throw new Error("You have already marked attendance for this session");
       }
 
-      existingRecords.push(attendanceRecord)
-
-      // Save back to localStorage
-      localStorage.setItem("attendanceRecords", JSON.stringify(existingRecords))
-
-      // Show success message
+      existingRecords.push(attendanceRecord);
+      localStorage.setItem(
+        "attendanceRecords",
+        JSON.stringify(existingRecords)
+      );
       toast({
         title: "Success!",
         description: isWithinRange
           ? "Your attendance has been marked successfully."
           : "Attendance marked but flagged due to location.",
         variant: "default",
-      })
+      });
 
-      setAttendanceMarked(true)
-
-      // Redirect to confirmation page after a delay
+      setAttendanceMarked(true);
       setTimeout(() => {
-        router.push("/student/success")
-      }, 2000)
+        router.push("/student/success");
+      }, 2000);
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "Failed to mark attendance. Please try again.",
+        description:
+          error.message || "Failed to mark attendance. Please try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
