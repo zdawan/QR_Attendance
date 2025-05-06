@@ -26,21 +26,18 @@ export default function CreateSessionPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    // Check if admin is logged in
-    const storedSession = localStorage.getItem("adminSession")
+    const storedSession = localStorage.getItem("adminSession");
     if (!storedSession) {
-      router.push("/admin/login")
-      return
+      router.push("/admin/login");
+      return;
     }
 
-    setAdminSession(JSON.parse(storedSession))
+    setAdminSession(JSON.parse(storedSession));
+    const randomId = Math.random().toString(36).substring(2, 10).toUpperCase();
+    setSessionId(randomId);
 
-    // Generate a random session ID
-    const randomId = Math.random().toString(36).substring(2, 10).toUpperCase()
-    setSessionId(randomId)
-
-    setIsLoading(false)
-  }, [router])
+    setIsLoading(false);
+  }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem("adminSession")
@@ -53,9 +50,7 @@ export default function CreateSessionPage() {
 
   const handleCreateSession = (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
-
-    // Create QR code data
+    setIsSubmitting(true);
     const sessionData = {
       sessionId,
       subjectCode,
@@ -64,10 +59,7 @@ export default function CreateSessionPage() {
       createdBy: adminSession.email,
     }
 
-    setQrData(sessionData)
-
-    // In a real app, this would be saved to a database
-    // For this demo, we'll save to localStorage
+    setQrData(sessionData);
     const storedSessions = JSON.parse(localStorage.getItem("sessions") || "[]")
     storedSessions.push(sessionData)
     localStorage.setItem("sessions", JSON.stringify(storedSessions))

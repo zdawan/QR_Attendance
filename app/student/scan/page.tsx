@@ -275,14 +275,20 @@ export default function ScanPage() {
       <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 p-4">
         <Card className="w-full max-w-md border-none shadow-xl">
           <CardHeader className="bg-gradient-to-r from-green-400 to-green-600 text-white">
-            <CardTitle className="text-center text-2xl">Attendance Marked!</CardTitle>
+            <CardTitle className="text-center text-2xl">
+              Attendance Marked!
+            </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center p-6">
             <div className="mb-4 rounded-full bg-green-100 p-4">
               <Check className="h-12 w-12 text-green-600" />
             </div>
-            <p className="text-center text-lg">Your attendance has been recorded successfully.</p>
-            <p className="mt-2 text-center text-sm text-gray-500">Register Number: {studentInfo.regNo}</p>
+            <p className="text-center text-lg">
+              Your attendance has been recorded successfully.
+            </p>
+            <p className="mt-2 text-center text-sm text-gray-500">
+              Register Number: {studentInfo.regNo}
+            </p>
             <Button
               className="mt-6 w-full bg-gradient-to-r from-purple-500 to-pink-500"
               onClick={() => router.push("/")}
@@ -292,13 +298,28 @@ export default function ScanPage() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 p-4">
-      <div className="container mx-auto flex max-w-md flex-col items-center justify-center py-6">
-        <Link href="/student/dashboard" className="mb-4 flex items-center text-white hover:underline">
+    <div className="relative min-h-screen bg-white p-4">
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-black opacity-5 blur-2xl" />
+        <div className="absolute bottom-16 right-12 grid grid-cols-4 gap-2">
+          {[...Array(16)].map((_, i) => (
+            <div key={i} className="h-2 w-2 bg-black opacity-10 rounded-full" />
+          ))}
+        </div>
+        <div className="absolute top-1/2 -left-40 w-[400px] h-[4px] bg-black opacity-10 rotate-45" />
+        <div className="absolute top-20 right-20 h-32 w-32 border-2 border-black opacity-10 rounded-lg rotate-12" />
+        <div className="absolute bottom-28 left-1/3 h-40 w-64 bg-black opacity-5 rotate-3 rounded-lg blur-sm" />
+      </div>
+
+      <div className="container mx-auto flex max-w-md flex-col items-center justify-center py-6 relative z-10">
+        <Link
+          href="/student/dashboard"
+          className="mb-4 flex items-center text-gray-600 hover:underline"
+        >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Dashboard
         </Link>
@@ -308,7 +329,8 @@ export default function ScanPage() {
             <MapPin className="h-4 w-4" />
             <AlertTitle>Location Warning</AlertTitle>
             <AlertDescription>
-              You appear to be outside the classroom range (50m). Your attendance may be flagged for review.
+              You appear to be outside the classroom range (50m). Your
+              attendance may be flagged for review.
             </AlertDescription>
           </Alert>
         )}
@@ -333,19 +355,26 @@ export default function ScanPage() {
                       >
                         <div className="font-medium">{session.subjectCode}</div>
                         <div className="text-sm text-gray-500">
-                          Expires: {new Date(session.expiresAt).toLocaleTimeString()}
+                          Expires:{" "}
+                          {new Date(session.expiresAt).toLocaleTimeString()}
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="rounded-lg border border-dashed border-gray-300 p-4 text-center">
-                    <p className="text-gray-500">No active sessions available for your department.</p>
+                    <p className="text-gray-500">
+                      No active sessions available for your department.
+                    </p>
                   </div>
                 )}
 
                 <div className="pt-2 text-center">
-                  <Button variant="outline" onClick={() => setManualEntry(true)} className="w-full">
+                  <Button
+                    variant="outline"
+                    onClick={() => setManualEntry(true)}
+                    className="w-full"
+                  >
                     Enter Session ID Manually
                   </Button>
                 </div>
@@ -353,7 +382,10 @@ export default function ScanPage() {
             ) : !manualEntry ? (
               <div className="space-y-4">
                 <div className="overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-50">
-                  <QrScanner onScan={handleQrCodeScanned} sessionData={selectedSession} />
+                  <QrScanner
+                    onScan={handleQrCodeScanned}
+                    sessionData={selectedSession}
+                  />
                 </div>
 
                 <div className="text-center text-sm text-gray-500">
@@ -361,7 +393,10 @@ export default function ScanPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline" onClick={() => setSelectedSession(null)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setSelectedSession(null)}
+                  >
                     Back to Sessions
                   </Button>
 
@@ -392,8 +427,8 @@ export default function ScanPage() {
                     variant="outline"
                     className="flex-1"
                     onClick={() => {
-                      setManualEntry(false)
-                      if (!selectedSession) setSelectedSession(null)
+                      setManualEntry(false);
+                      if (!selectedSession) setSelectedSession(null);
                     }}
                   >
                     <Camera className="mr-2 h-4 w-4" />
@@ -402,7 +437,7 @@ export default function ScanPage() {
 
                   <Button
                     type="submit"
-                    className="flex-1 bg-gradient-to-r from-green-500 to-teal-600"
+                    className="flex-1 bg-gradient-to-r from-blue-400 to-indigo-500"
                     disabled={isSubmitting}
                   >
                     Submit
@@ -414,5 +449,5 @@ export default function ScanPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
