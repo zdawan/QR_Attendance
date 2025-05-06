@@ -42,7 +42,6 @@ export default function AdminDashboardPage() {
   const [attendanceRecords, setAttendanceRecords] = useState<any[]>([]);
 
   useEffect(() => {
-    // Check if admin is logged in
     const storedSession = localStorage.getItem("adminSession");
     if (!storedSession) {
       router.push("/admin/login");
@@ -51,7 +50,6 @@ export default function AdminDashboardPage() {
 
     setAdminSession(JSON.parse(storedSession));
 
-    // Load or initialize demo data
     let storedSessions = localStorage.getItem("sessions");
     if (!storedSessions) {
       const demoSessions = generateDemoSessions();
@@ -68,7 +66,6 @@ export default function AdminDashboardPage() {
     }
     setStudents(JSON.parse(storedStudents));
 
-    // Get attendance records
     const storedRecords = localStorage.getItem("attendanceRecords");
     if (storedRecords) {
       setAttendanceRecords(JSON.parse(storedRecords));
@@ -77,7 +74,6 @@ export default function AdminDashboardPage() {
     setIsLoading(false);
   }, [router]);
 
-  // Refresh data from localStorage
   const refreshData = () => {
     const storedSessions = localStorage.getItem("sessions");
     if (storedSessions) {
@@ -114,7 +110,6 @@ export default function AdminDashboardPage() {
     router.push("/admin/sessions/create");
   };
 
-  // CRUD operations for sessions
   const handleDeleteSession = (sessionId: string) => {
     const updatedSessions = sessions.filter(
       (session) => session.sessionId !== sessionId
@@ -122,7 +117,6 @@ export default function AdminDashboardPage() {
     localStorage.setItem("sessions", JSON.stringify(updatedSessions));
     setSessions(updatedSessions);
 
-    // Also delete related attendance records
     const updatedRecords = attendanceRecords.filter(
       (record) => record.sessionId !== sessionId
     );
@@ -136,7 +130,6 @@ export default function AdminDashboardPage() {
     });
   };
 
-  // CRUD operations for students
   const handleDeleteStudent = (regNo: string) => {
     const updatedStudents = students.filter(
       (student) => student.regNo !== regNo
@@ -144,7 +137,6 @@ export default function AdminDashboardPage() {
     localStorage.setItem("students", JSON.stringify(updatedStudents));
     setStudents(updatedStudents);
 
-    // Also delete related attendance records
     const updatedRecords = attendanceRecords.filter(
       (record) => record.regNo !== regNo
     );
@@ -158,7 +150,6 @@ export default function AdminDashboardPage() {
     });
   };
 
-  // CRUD operations for attendance records
   const handleDeleteAttendance = (index: number) => {
     const updatedRecords = [...attendanceRecords];
     updatedRecords.splice(index, 1);
@@ -184,14 +175,12 @@ export default function AdminDashboardPage() {
   };
 
   const exportAttendanceReport = () => {
-    // Create CSV content
     let csvContent = "Session ID,Register Number,Department,Timestamp,Status\n";
 
     attendanceRecords.forEach((record) => {
       csvContent += `${record.sessionId},${record.regNo},${record.departmentId},${record.timestamp},${record.status}\n`;
     });
 
-    // Create download link
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -208,7 +197,6 @@ export default function AdminDashboardPage() {
   };
 
   const exportSessionsList = () => {
-    // Create CSV content
     let csvContent =
       "Session ID,Subject Code,Created At,Expires At,Created By\n";
 
@@ -216,7 +204,6 @@ export default function AdminDashboardPage() {
       csvContent += `${session.sessionId},${session.subjectCode},${session.createdAt},${session.expiresAt},${session.createdBy}\n`;
     });
 
-    // Create download link
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -233,14 +220,12 @@ export default function AdminDashboardPage() {
   };
 
   const exportStudentsList = () => {
-    // Create CSV content
     let csvContent = "Name,Register Number,Department ID\n";
 
     students.forEach((student) => {
       csvContent += `${student.name},${student.regNo},${student.departmentId}\n`;
     });
 
-    // Create download link
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -274,13 +259,10 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 relative">
-      {/* Background Illustrations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 h-64 w-64 rounded-full bg-blue-500 opacity-5 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 h-80 w-80 rounded-full bg-purple-500 opacity-5 blur-3xl"></div>
         <div className="absolute top-1/3 right-1/4 h-40 w-40 rounded-full bg-cyan-400 opacity-5 blur-2xl"></div>
-
-        {/* QR Code Pattern */}
         <div className="absolute top-20 right-20 h-32 w-32 border-4 border-blue-900 opacity-5 rounded-lg"></div>
         <div className="absolute bottom-40 left-20 h-24 w-24 border-4 border-blue-900 opacity-5 rounded-lg"></div>
       </div>
@@ -550,8 +532,6 @@ export default function AdminDashboardPage() {
                       className="pl-9 w-[200px]"
                     />
                   </div>
-
-                  {/* Department Filter */}
                   <Select
                     value={studentDeptFilter}
                     onValueChange={setStudentDeptFilter}
@@ -573,8 +553,6 @@ export default function AdminDashboardPage() {
                 </div>
               )}
             </div>
-
-            {/* Filtered Students List */}
             <StudentsList
               students={students.filter((student) => {
                 const matchSearch =
