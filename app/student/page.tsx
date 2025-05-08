@@ -30,7 +30,7 @@ export default function StudentPage() {
       })
     );
 
-    router.push("/student/dashboard");
+    router.push("/student/otp");
   };
 
   return (
