@@ -72,7 +72,7 @@ export default function DashboardPage() {
   };
 
   const verifyOtp = () => {
-    setMessage("✅ Verified!");
+    setMessage("Verified!");
     setVerified(true);
     setOtp("");
     setOtpSent(false);
