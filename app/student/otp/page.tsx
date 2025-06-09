@@ -132,7 +132,7 @@ export default function DashboardPage() {
               className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
               disabled={otpSent && timeLeft > 0}
             >
-              Send OTP
+              Send OTP to {email}
             </button>
 
             {otpSent && timeLeft > 0 && (
