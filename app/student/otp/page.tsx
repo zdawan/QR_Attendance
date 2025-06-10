@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -115,7 +115,7 @@ export default function DashboardPage() {
           <CardHeader className="bg-gradient-to-r from-green-500 to-teal-600 text-white">
             <CardTitle>OTP Login</CardTitle>
             <CardDescription className="text-green-50">
-              Secure access to your dashboard
+              Secure and Easy access to your dashboard
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6 space-y-4">
