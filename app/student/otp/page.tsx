@@ -148,7 +148,7 @@ export default function DashboardPage() {
                   onClick={verifyOtp}
                   className="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
                 >
-                  Verify OTP
+                  Verify
                 </button>
                 <p className="text-sm text-gray-600 text-center">
                   Time remaining:{" "}
