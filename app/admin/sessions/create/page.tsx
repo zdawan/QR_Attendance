@@ -90,7 +90,10 @@ export default function CreateSessionPage() {
 
       <main className="container mx-auto p-4 py-6">
         <div className="mb-6 flex items-center gap-2">
-          <Link href="/admin/dashboard" className="flex items-center text-gray-600 hover:text-gray-900">
+          <Link
+            href="/admin/dashboard"
+            className="flex items-center text-gray-600 hover:text-gray-900"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Link>
@@ -113,17 +116,20 @@ export default function CreateSessionPage() {
                       required
                       readOnly
                     />
-                    <p className="text-xs text-gray-500">Auto-generated unique ID</p>
+                    <p className="text-xs text-gray-500">
+                      Auto-generated unique ID
+                    </p>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="subjectCode">Subject Code / Department ID</Label>
+                    <Label htmlFor="subjectCode">
+                      Subject Code / Department ID
+                    </Label>
                     <Input
                       id="subjectCode"
                       placeholder="e.g. IT01, CSE02"
                       value={subjectCode}
                       onChange={(e) => setSubjectCode(e.target.value)}
-                      required
                     />
                   </div>
 
@@ -133,7 +139,7 @@ export default function CreateSessionPage() {
                       id="expiryMinutes"
                       type="number"
                       min="1"
-                      max="60"
+                      max="10"
                       value={expiryMinutes}
                       onChange={(e) => setExpiryMinutes(e.target.value)}
                       required
@@ -146,7 +152,7 @@ export default function CreateSessionPage() {
                     disabled={isSubmitting || !!qrData}
                   >
                     <QrCode className="mr-2 h-4 w-4" />
-                    Generate QR Code
+                    Generate QR Code for {subjectCode}
                   </Button>
                 </form>
               </CardContent>
@@ -161,16 +167,25 @@ export default function CreateSessionPage() {
                 </CardHeader>
                 <CardContent className="flex flex-col items-center p-6">
                   <div className="mb-4 rounded-lg border-2 border-dashed border-gray-200">
-                    <QRCode value={JSON.stringify(qrData)} size={200} level="H" includeMargin={true} />
+                    <QRCode
+                      value={JSON.stringify(qrData)}
+                      size={200}
+                      level="H"
+                      includeMargin={true}
+                    />
                   </div>
 
                   <div className="mb-4 w-full rounded-lg bg-gray-50 p-4">
                     <div className="grid grid-cols-2 gap-2">
                       <div className="text-sm text-gray-500">Session ID:</div>
-                      <div className="text-sm font-medium">{qrData.sessionId}</div>
+                      <div className="text-sm font-medium">
+                        {qrData.sessionId}
+                      </div>
 
                       <div className="text-sm text-gray-500">Subject Code:</div>
-                      <div className="text-sm font-medium">{qrData.subjectCode}</div>
+                      <div className="text-sm font-medium">
+                        {qrData.subjectCode}
+                      </div>
 
                       <div className="text-sm text-gray-500">Expires In:</div>
                       <div className="flex items-center text-sm font-medium">
@@ -192,9 +207,12 @@ export default function CreateSessionPage() {
               <div className="flex h-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-12 text-center">
                 <div>
                   <QrCode className="mx-auto h-12 w-12 text-gray-400" />
-                  <h3 className="mt-2 text-lg font-medium text-gray-900">No QR Code Generated</h3>
+                  <h3 className="mt-2 text-lg font-medium text-gray-900">
+                    No QR Code Generated
+                  </h3>
                   <p className="mt-1 text-sm text-gray-500">
-                    Fill out the form and click "Generate QR Code" to create a new attendance session.
+                    Fill out the form and click "Generate QR Code" to create a
+                    new attendance session.
                   </p>
                 </div>
               </div>
@@ -203,5 +221,5 @@ export default function CreateSessionPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }
